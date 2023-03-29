@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mappers.adminMapper">
+
+	<!-- 관리자 : 전체 회원 불러오기 -->
+	<select id="getAllUsers" parameterType="hashMap" resultType="ezen.project.IGSJ.member.domain.MemberDTO">
+		select
+
+			userId,
+			userPwd,
+			userName,
+			userPhoneNumber,
+			userEmail,
+			userJoinDate,
+			userVerify,
+			userBirth
+
+		from MemberDTO
+
+		<if test="searchType.equals('userId')">
+			where userId like concat('%', #{keyword}, '%')
+		</if>
+		<if test="searchType.equals('userName')">
+			where userName like concat('%', #{keyword}, '%')
+		</if>
+		<if test="searchType.equals('userVerify')">
+			where userVerify like concat('%', #{keyword}, '%')
+		</if>
+
+		order by userVerify desc
+		limit #{displayTotalContent} , #{pageContent}
+
+	</select>
+
+	<!-- 검색된 결과에 일치하는 회원수 -->
+	<select id="searchMember" resultType="Int" parameterType="hashmap">
+
+		select count(*)
+		from MemberDTO
+
+		<if test="searchType.equals('userId')">
+			where userId like concat('%', #{keyword}, '%')
+		</if>
+		<if test="searchType.equals('userName')">
+			where userName like concat('%', #{keyword}, '%')
+		</if>
+		<if test="searchType.equals('userVerify')">
+			where userVerify like concat('%', #{keyword}, '%')
+		</if>
+
+	</select>
+	
+	<!-- 관리자 : 전체 상품 불러오기 -->
+	<select id="getProductList" parameterType="hashMap" resultType="ezen.project.IGSJ.product.domain.ProductDTO">
+		select
+
+		product.pno,
+		pft.storedFileRootName,
+		cno,
+		product_name,
+		product_price,
+		product_stock,
+		product_description,
+		product_regDate,
+		userId
+
+		from ProductDTO as product
+		left outer join ProductFileDTO as pft
+		on product.pno = pft.pno
+
+		<if test="searchType.equals('userId')">
+			where userId like concat('%', #{keyword}, '%')
+		</if>
+		<if test="searchType.equals('product_name')">
+			where product_name like concat('%', #{keyword}, '%')
+		</if>
+		<if test="searchType.equals('cno')">
+			where cno between #{keyword} and #{keyword} + 100
+		</if>
+
+		order by product_name <!-- 검색결과 가나다순 정리 -->
+		limit #{displayTotalContent} , #{pageContent}
+
+	</select>
+
+	<!-- 검색된 결과에 일치하는 상품 -->
+	<select id="searchProduct" resultType="Int" parameterType="hashmap">
+
+		select count(*)
+		from ProductDTO
+
+		<if test="searchType.equals('userId')">
+			where userId like concat('%', #{keyword}, '%')
+		</if>
+		<if test="searchType.equals('product_name')">
+			where product_name like concat('%', #{keyword}, '%')
+		</if>
+		<if test="searchType.equals('cno')">
+			where cno between #{keyword} and #{keyword} + 100
+		</if>
+
+	</select>
+	
+	<!-- 관리자 회원 상세 정보 조회 -->
+	<select id="adminSelectMember" parameterType="String" resultType="ezen.project.IGSJ.member.domain.MemberDTO">
+		select 
+			userId,
+			userPwd,
+			userName,
+			userPhoneNumber,
+			userEmail,
+			userJoinDate,
+			userVerify,
+			userBirth
+			
+		from MemberDTO
+		where userId = #{userId}
+	</select>
+	<select id="adminSelectAddress" parameterType="String" resultType="ezen.project.IGSJ.address.domain.MemberAddressDTO">
+		select 
+			userId,
+			postAddress,
+			address,
+			detailAddress
+			
+		from MemberAddressDTO
+		where userId = #{userId}
+	</select>
+	
+	<!-- 관리자 회원 정보 수정 -->
+	<update id="adminMemberModify" parameterType="ezen.project.IGSJ.member.domain.MemberDTO">
+		update MemberDTO
+			set
+				userPwd = #{userPwd},
+				userEmail = #{userEmail}
+		where userId = #{userId}
+	</update>
+	<update id="adminAddressModify" parameterType="ezen.project.IGSJ.address.domain.MemberAddressDTO">
+		update MemberAddressDTO
+			set
+				postAddress = #{postAddress},
+				address = #{address},
+				detailAddress = #{detailAddress}
+				
+		where userId = #{userId}
+	</update>
+
+</mapper>

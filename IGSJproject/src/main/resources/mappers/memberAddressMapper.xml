@@ -10,4 +10,23 @@
 
 </insert>
 
+<!-- 회원수정(주소) 로직  -->
+<update id = "memberAddressModify" parameterType = "ezen.project.IGSJ.address.domain.MemberAddressDTO">
+	
+	UPDATE MemberAddressDTO
+	SET postAddress = #{postAddress},
+		address = #{address},
+		detailAddress = #{detailAddress}
+	WHERE userId = #{userId}
+
+</update>
+
+<!-- 회원 정보 찾기(주소) -->
+<select id = "memberAddressProfile" parameterType = "String" resultType = "ezen.project.IGSJ.address.domain.MemberAddressDTO">
+
+	SELECT postAddress, address, detailAddress
+	FROM MemberAddressDTO
+	WHERE userId = #{userId}
+
+</select>
 </mapper>

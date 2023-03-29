@@ -16,11 +16,29 @@ public class MemberAddressServiceImpl implements MemberAddressService {
 	@Autowired
 	private MemberAddressDAO memberAddressDAO;
 	
+	//회원 주소 가입
 	@Override
 	public void signUpAddressMember(MemberAddressDTO memberAddressDTO) throws Exception {
 		
 		logger.info("회원주소 추가 signUpMember - Service");
 		
 		memberAddressDAO.signUpAddressMember(memberAddressDTO);
+	}
+	//회원 주소 수정
+	@Override
+	public void memberAddressModify(MemberAddressDTO memberAddressDTO) throws Exception {
+		
+		logger.info("회원 주소 수정 memberAddressModify - Service");
+		
+		memberAddressDAO.memberAddressModify(memberAddressDTO);
+	}
+	
+	//회원 정보 찾기
+	@Override
+	public MemberAddressDTO memberAddressProfile(String userId) throws Exception {
+		
+		logger.info("회원 정보 찾기 memberAddressProfile - Service");
+		
+		return memberAddressDAO.memberAddressProfile(userId);
 	}
 }

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mappers.sellerMapper">
+	
+	<select id="getCategory"  resultType="ezen.project.IGSJ.category.domain.CategoryDTO" >
+	  			select case when category_level is null then 1 
+								  when cno is not null then 2
+         						  END AS big_ctg , cno, category_name, category_level
+					from CategoryDTO;
+	</select>
+	
+	<insert id="postRegister" parameterType="ezen.project.IGSJ.product.domain.ProductDTO">
+		insert into ProductDTO( pno, cno, product_name, product_price, product_stock, product_description,userId)
+		values ( #{pno}, #{cno}, #{product_name} ,#{product_price}, #{product_stock}, #{product_description},#{userId})
+	</insert>
+	
+	<insert id="imgRegister" parameterType="ezen.project.IGSJ.productFile.domain.ProductFileDTO" >
+		insert into ProductFileDTO(pno,originalFileName,storedFileRootName,storedThumbNailName)
+		values ( #{pno}, #{originalFileName},#{storedFileRootName},#{storedThumbNailName})
+	</insert>
+
+</mapper>

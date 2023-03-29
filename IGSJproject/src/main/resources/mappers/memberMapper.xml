@@ -13,17 +13,6 @@
 	userVerify	int	NO		0
 	userBirth	varchar(20)	NO		
  -->
- 
- <!-- 
- 	MemberAddressDTO
- 	userId	varchar(20)	NO	PRI	
-	postAddress	varchar(20)	NO		
-	address	varchar(20)	NO		
-	detailAddress	varchar(20)	NO		
-  -->
-
-
-
 
 <!-- 회원가입(회원정보) -->
 <insert id = "signUpMember" parameterType = "ezen.project.IGSJ.member.domain.MemberDTO">
@@ -47,6 +36,28 @@
 <select id = "memberIdCheck" resultType = "int" parameterType = "String">
 	
 	SELECT COUNT(*)
+	FROM MemberDTO
+	WHERE userId = #{userId}
+
+</select>
+
+<!-- 회원 정보 수정 로직 -->
+<update id = "memberModify" parameterType = "ezen.project.IGSJ.member.domain.MemberDTO">
+
+	UPDATE MemberDTO
+	SET 
+		userName = #{userName},
+		userPhoneNumber = #{userPhoneNumber},
+		userEmail = #{userEmail},
+		userBirth = #{userBirth}
+	WHERE userId = #{userId}
+	<!-- userPwd = #{userPwd}, -->
+</update>
+
+<!-- 회원 정보 찾기 -->
+<select id = "memberProfile" parameterType = "String" resultType = "ezen.project.IGSJ.member.domain.MemberDTO">
+
+	SELECT userId, userName, userPhoneNumber, userEmail, userBirth
 	FROM MemberDTO
 	WHERE userId = #{userId}
 

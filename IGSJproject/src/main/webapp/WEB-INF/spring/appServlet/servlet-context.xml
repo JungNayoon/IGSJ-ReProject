@@ -28,18 +28,25 @@
 	<context:component-scan base-package="ezen.project.IGSJ"/>
 	<context:component-scan base-package="ezen.project.IGSJ.member"/>
 	<context:component-scan base-package="ezen.project.IGSJ.address"/>
+	<context:component-scan base-package="ezen.project.IGSJ.category"/>
+	<context:component-scan base-package="ezen.project.IGSJ.product"/>
+	<context:component-scan base-package="ezen.project.IGSJ.productFile"/>
+	<context:component-scan base-package="ezen.project.IGSJ.seller"/>
+	<context:component-scan base-package="ezen.project.IGSJ.utils"/>
 	
 	<!-- 파일 업로드 -->
 	<!-- 파일 업로드 경로 -->
 	<beans:bean class="java.lang.String" id="uploadPath"> <!-- uploadPath라는 id, class=String은 생성자의 매개변수가 String이라는 의미 -->
-		<beans:constructor-arg value="D:\jsp\workspace\.metadata\.plugins\org.eclipse.wst.server.core\tmp8\wtpwebapps\Mgsjproject\resources"></beans:constructor-arg>
+		<beans:constructor-arg value="C:\Users\home\git\IGSJ-ReProject\IGSJproject\src\main\webapp\WEB-INF\resources"></beans:constructor-arg>
 	</beans:bean>
-	
 	<!-- 일반 파일 업로드 경로 -->
 	<resources mapping="/imgUpload/**" location="/resources/imgUpload/"/> <!-- <=/imgUpload/~ 를 통해 들어오면 location으로 저장 -->
 	<beans:bean class="org.springframework.web.multipart.commons.CommonsMultipartResolver" id="multipartResolver">
 		<beans:property name="maxUploadSize" value="15485760"></beans:property>
 	</beans:bean>
+	
+		<!-- 대체 이미지 파일 경로 -->
+	<resources mapping="/images/**" location="/resources/images/"/>
 	<!-- 파일 업로드 끝 -->
 	
 	<!-- 인터셉터 경로 및 객체생성-->

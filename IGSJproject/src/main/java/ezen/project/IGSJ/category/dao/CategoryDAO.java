@@ -11,5 +11,4 @@ public interface CategoryDAO {
 	public List<CategoryDTO> getCategoryInfos(int num) throws Exception;
 
 
-
 } // public interface CategoryDAO()

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,28 +30,25 @@ public class MemberController {
 
 	@Autowired
 	private MemberService memberService;
-	
-	 @Autowired
-	 private BCryptPasswordEncoder passEncoder;
+
+	@Autowired
+	private BCryptPasswordEncoder passEncoder;
 
 	// 회원가입(POST)
 	@PostMapping("/memberSignUp")
 	public void signUpMember(@RequestBody MemberDTO memberDTO) throws Exception {
-		
+
 		logger.info("회원가입 Step1 memberDTO ==> {}", memberDTO.toString());
-		 
+
 		String inputPass = memberDTO.getUserPwd();
-		 String pass = passEncoder.encode(inputPass);
-		 memberDTO.setUserPwd(pass);
+		String pass = passEncoder.encode(inputPass);
+		memberDTO.setUserPwd(pass);
 
-		 memberService.signUpMember(memberDTO);
-
-		
-		
 		memberService.signUpMember(memberDTO);
+
 	}
-	
-	//로그인 기능 구현
+
+	// 로그인 기능 구현
 	@GetMapping("/member/memberLogin")
 	public void memberLogin(MemberDTO memberDTO, HttpServletRequest req, RedirectAttributes reat) throws Exception {
 
@@ -58,9 +56,9 @@ public class MemberController {
 		logger.info("로그인 진행 memberLoginPage - Controller");
 
 		String inputPass = memberDTO.getUserPwd();
-		
+
 		String pass = passEncoder.encode(inputPass);
-		
+
 		memberDTO.setUserPwd(pass);
 
 		MemberDTO memberInfo = memberService.memberLogin(memberDTO);
@@ -91,19 +89,43 @@ public class MemberController {
 		// 성공시 앞단에서 메인페이지로 이동시켜준다.
 		return "https://localhost:8080/";
 	}
-	 
+
 	// 회원가입 아이디 중복 체크
 	@ResponseBody
 	@PostMapping("/idCheck")
 	public int memberIdCheck(@RequestBody MemberDTO memberDTO) throws Exception {
-	
+
 		logger.info("회원가입 아이디 중복 체크 memberIdCheck - Controller");
-		
-		int result =  memberService.memberIdCheck(memberDTO);
-		
+
+		int result = memberService.memberIdCheck(memberDTO);
+
 		System.out.println("회원가입 중복 여부 => " + result);
-		
+
 		return result;
+	}
+	
+	// 회원정보 수정 기능 로직
+	@ResponseBody
+	@PostMapping("/memberModify")
+	public void memberModify(@RequestBody MemberDTO memberDTO, HttpSession session) throws Exception {
+		
+		logger.info("회원정보 수정 기능 로직, 수정 정보 {}", memberDTO);
+		
+		memberService.memberModify(memberDTO);
+		
+		memberLogout(session);
+	}
+	
+	// 회원 정보 찾기
+	@ResponseBody
+	@GetMapping("/memberProfile/{userId}")
+	public MemberDTO memberProfile(@PathVariable String userId) throws Exception {
+		
+		logger.info("회원 정보 찾기 memberProfile - Controller, 회원아이디 {}", userId);
+		
+		MemberDTO memberDTO = memberService.memberProfile(userId);
+		
+		return memberDTO;
 	}
 
 }

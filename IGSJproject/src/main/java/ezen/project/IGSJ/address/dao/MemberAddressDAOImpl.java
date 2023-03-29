@@ -1,5 +1,7 @@
 package ezen.project.IGSJ.address.dao;
 
+import java.util.HashMap;
+
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +20,7 @@ public class MemberAddressDAOImpl implements MemberAddressDAO {
 	@Autowired
 	private SqlSession sqlSession;
 	
+	//회원 가입(주소)
 	@Override
 	public void signUpAddressMember(MemberAddressDTO memberAddressDTO) throws Exception {
 		
@@ -25,5 +28,22 @@ public class MemberAddressDAOImpl implements MemberAddressDAO {
 		
 		sqlSession.insert(NAME_SPACE + ".signUpAddressMember", memberAddressDTO);
 		
+	}
+	//회원 수정(주소)
+	@Override
+	public void memberAddressModify(MemberAddressDTO memberAddressDTO) throws Exception {
+
+		logger.info("회원 주소 추가 signUpMember - DAO");
+		
+		sqlSession.update(NAME_SPACE + ".memberAddressModify", memberAddressDTO);
+	}
+	
+	//회원 정보 찾기(주소)
+	@Override
+	public MemberAddressDTO memberAddressProfile(String userId) throws Exception {
+		
+		logger.info("회원 정보 찾기 memberAddressProfile - DAO");
+		
+		return sqlSession.selectOne(NAME_SPACE + ".memberAddressProfile", userId);
 	}
 }
